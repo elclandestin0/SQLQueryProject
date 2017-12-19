@@ -35,7 +35,6 @@ def first_query():
                  '/article/trouble-for-troubled',
                  '/article/so-many-bears']
 
-
     #slugs = get_slugs()
     #path_variable = "/article/"
     db_name = "news"
@@ -43,20 +42,19 @@ def first_query():
     c = db.cursor()
     first_query = """select a.title, count (*) as views
     from articles as a
-    join log as l
+    left join log as l
     on %s = l.path
-    group by a.title"""
+    group by a.title
+    order by views desc"""
 
     for row in range(len(variables)):
-        c.execute(first_query, (variables[row],))
-        results = c.fetchone()
-        print(results)
+         c.execute(first_query, (variables[row],))
+         results = c.fetchall()
+         print(results)
 
-    # c.execute(first_query, (path_variable,))
 
     # Here, the first_query results are stored in a variable
     # by the fetch all command.
-    first_query_results = c.fetchall()
 
     # if c.rowcount == 0:
     #     print "Query returned no results!"
