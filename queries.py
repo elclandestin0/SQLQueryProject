@@ -3,10 +3,10 @@ import psycopg2
 import bleach
 import csv
 
-""" In this file, we will define the queries,
+"""In this file, we will define the queries,
     and run them one by one. Ideally, we want
     the final product to be displayed on a
-    www server hosted as a guest. """
+    www server hosted as a guest."""
 
 
 def get_slugs():
@@ -40,17 +40,16 @@ def first_query():
     db_name = "news"
     db = psycopg2.connect(dbname=db_name)
     c = db.cursor()
-    first_query = """select a.title, count (*) as views
-    from articles as a
-    left join log as l
-    on %s = l.path
+    first_query = """select a.title, count(*) as views
+    from articles as a join log as l
+    on l.path like concat('%', a.slug)
     group by a.title
     order by views desc"""
 
-    for row in range(len(variables)):
-         c.execute(first_query, (variables[row],))
-         results = c.fetchall()
-         print(results)
+    c.execute(first_query)
+    first_query_results = c.fetchall()
+    for row in first_query_results:
+        print(row)
 
 
     # Here, the first_query results are stored in a variable
