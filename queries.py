@@ -7,20 +7,28 @@ import bleach
     the final product to be displayed on a
     www server hosted as a guest. """
 
-# first we test if our view is running.
 def first_query():
+    path_variable = "/article/"
     db_name = "news"
     db = psycopg2.connect(dbname=db_name)
     c = db.cursor()
-    path_variable = "/article/"
-    slug_variable = "a.slug"
-    c.execute("""select a.title, count(*) as views
-    from articles as a, log as l
-    where a.slug = l.path
-    group by a.title""", (path_variable))
-    manyresults = c.fetchall()
-    for row in manyresults:
-        print (row)
+    first_query = """select a.title, count (*) as views
+    from articles as a
+    join log as l
+    on %s = l.path
+    group by a.title"""
+    c.execute(first_query,(path_variable + "a.slug", ))
+
+    # Here, the first_query results are stored in a variable
+    # by the fetch all command.
+    first_query_results = c.fetchall()
+
+    if c.rowcount == 0:
+        print "Query returned no results!"
+    else:
+        for row in first_query_results:
+            print (row)
+    print "First query is complete"
     db.close()
 
 first_query()
