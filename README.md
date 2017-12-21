@@ -8,6 +8,7 @@ file to your directory. <code>cd</code> into the directory, and run the followin
 - <code> psql </code>
 - <code> -d news </code>
 - <code> -f newsdata.sql </code>
+
 This connects to the installed database, creates the tables from the file, and populates
 them with data. From there, you can run many <code> psql </code> commands to query the
 data, or to explore the relations and their respective columns of data.
