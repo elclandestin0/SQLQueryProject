@@ -11,15 +11,24 @@ import sys
    www server hosted as a guest."""
 
 
+def connect(db_name="news"):
+    # This code was created with the help of Udacity
+    try:
+        db = psycopg2.connect("dbname={}".format(db_name))
+        cursor = db.cursor()
+        return db, cursor
+        print ("Successfully connected to the news database.\n")
+    except:
+        print("""Unable to connect to the news database.
+                 The program will now exit.\n""")
+        sys.exit()
+
 def first_query():
     """In the first query, we want to fetch
        the top 3 rows that contain the article
        names with the greatest views"""
 
-    db_name = "news"
-    db = psycopg2.connect(dbname=db_name)
-    c = db.cursor()
-
+    db, c = connect()
     # Our first query selects the article title
     # and it's number of views after aggregating
     # the database to match the path name LIKE
@@ -37,8 +46,8 @@ def first_query():
                      GROUP BY art.title
                      ORDER BY views DESC
                      fetch next 3 rows only"""
-    print """Executing first query. Please stand by while we
-             query the data.\n"""
+    print("""Executing first query. Please stand by while we
+             query the data.\n""")
     c.execute(first_query)
     first_query_results = c.fetchall()
     # Here, the first_query results are stored in
@@ -63,9 +72,7 @@ def second_query():
        our first query by making sure that the author of
        article (id) = the id of the author."""
 
-    db_name = "news"
-    db = psycopg2.connect(dbname=db_name)
-    c = db.cursor()
+    db, c = connect()
 
     # First, we select the author name and number of hits
     # that were aggregated from equating the author ID with
@@ -100,10 +107,8 @@ def third_query():
         percentage of users who encountered errors requesting
         to access website is greater than 1%"""
 
-    db_name = "news"
-    db = psycopg2.connect(dbname=db_name)
-    c = db.cursor()
-
+    db, c = connect()
+    
     # To perform this query, it took me a while to code around
     # a subquery. However, as I read the documentation and the
     # similar problems encountered by the community, I realized
