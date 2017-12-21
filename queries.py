@@ -1,8 +1,8 @@
 # Code written by: Memo Khoury
 import datetime
 import psycopg2
-import bleach
 import csv
+import sys
 
 """In this file, we will define the queries,
    and run them one by one. Ideally, we want
@@ -33,7 +33,7 @@ def first_query():
     first_query = """select art.title, count(*) as views
                      from articles as art, log as l
                      where l.path like concat('/article/', art.slug)
-                     group by a.title
+                     group by art.title
                      order by views desc
                      fetch next 3 rows only"""
     print """Executing first query. Please stand by while we
@@ -90,28 +90,43 @@ def second_query():
     print "Second query is complete"
     db.close()
 
+
 def third_query():
-    """In the third query, bla bla"""
+    """In the third query, we want to fetch the day where the
+        percentage of users who encountered errors requesting
+        to access website is greater than 1%"""
 
     db_name = "news"
     db = psycopg2.connect(dbname=db_name)
     c = db.cursor()
 
-    # Explain query here bla bla
+    # To perform this query, it took me a while to code around
+    # a subquery. However, as I read the documentation and the
+    # similar problems encountered by the community, I realized
+    # that I can simply filter the count results by the filter
+    # function, thanks to PSQL. In this query, we select the
+    # date as day, and the division of the requests that lead to
+    # errors by the total number of requests. This will give us
+    # the percentage of errors. We aggregate this data in the
+    # month of July. Finally, after the data aggregation, we
+    # fetch the tuples that gives us the percentage > 1.0% !
     third_query = """select time::date as day,
-                     round(count(status) filter (where status = '404 NOT FOUND') * 100::numeric /
-                     count(status)::numeric, 2) as error_percent
+                     round(count(status) filter
+                     (where status = '404 NOT FOUND') * 100::numeric
+                     / count(status)::numeric, 2) as error_percent
                      from log
                      where time::date between
                      to_date('2016-07-01', 'yyyy-mm-dd')
                      and to_date('2016-07-31', 'yyyy-mm-dd')
                      group by time::date
-                     order by error_percent > 1"""
+                     having round(count(status) filter
+                     (where status = '404 NOT FOUND')* 100::numeric
+                     /count(status)::numeric, 2) > 1.0"""
 
     print """ Exeuting third query. Please stand by while we
               query the data."""
     c.execute(third_query)
-    third_query_results = c.fetchone()
+    third_query_results = c.fetchall()
 
     if c.rowcount == 0:
         print "Third query returned no results!"
@@ -120,16 +135,25 @@ def third_query():
             print(row)
     db.close()
 
+user_greeting = """Hello and welcome to the Logs analysis
+      program! Please select the following:
+      1) Find the top 3 articles of all time OR
+      2) Find the top authors of all time OR
+      3) Find the day where more than 1 percent OR
+      of the requests lead to errors OR
+      0) Exit program \n"""
 
-#first_query()
-#second_query()
-third_query()
-# user_input = input("""Hello and welcome to the Logs analysis
-#       program! Please select the following:
-#       1) Find the top 3 articles of all time
-#       2) Find the top authors of all time
-#       3) Find the day where more than 1 percent
-#       of the requests lead to errors""")
+user_input = input(user_greeting)
 
-# if user_input == 1:
-#     first_query()
+while user_input != 0:
+    if user_input == 1:
+        first_query()
+    elif user_input == 2:
+        second_query()
+    elif user_input == 3:
+        third_query()
+    elif user_input == 0:
+        print "Exiting program"
+        sys.exit()
+    else:
+        print "Invalid input!"
