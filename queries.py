@@ -50,8 +50,8 @@ def first_query():
         print "Query returned no results!\n"
     else:
         for row in first_query_results:
-            row = dict(row)
-            print(row)
+            print (str(row[0]).strip("()").strip("''") + " - " +
+            str(row[1]).strip("L"))
 
     print "First query is complete\n"
     db.close()
@@ -86,10 +86,8 @@ def second_query():
         print "Second query returned no results!\n"
     else:
         for row in second_query_results:
-            name_of_author = row[0]
-            views = row[1]
-            print("name: %s", (row[0],))
-            print("views: %s", (row[1],))
+            print (str(row[0]).strip("()").strip("''") + " - " +
+            str(row[1]).strip("L"))
 
     print "Second query is complete\n"
     db.close()
@@ -115,7 +113,6 @@ def third_query():
     # month of July. Finally, after the data aggregation, we
     # fetch the tuples that gives us the percentage > 1.0% !
     third_query = """
-                     CREATE VIEW error_percent AS
                      SELECT time::date AS day,
                      round(count(status) filter
                      (WHERE status = '404 NOT FOUND') * 100::numeric
@@ -138,7 +135,8 @@ def third_query():
         print "Third query returned no results!\n"
     else:
         for row in third_query_results:
-            print(row)
+            print (str(row[0]).strip("()").strip("''") + " - " +
+            str(row[1]).strip("L") + "%")
     db.close()
 
 
@@ -160,7 +158,7 @@ def user():
         third_query()
         user()
     elif user_input == 0:
-        print "Exiting program\n"
+        print "Good-bye.\n"
         sys.exit()
     else:
         print "Invalid input!\n"
