@@ -8,4 +8,4 @@ to choose from:
    by the same actor.
 3) Find the day(s) where the number of errors a website encountered is greater than 1%.
 
-For the results on those queries, kindly refer to the text file.
+For the results on those queries, kindly refer to the results.txt file.
