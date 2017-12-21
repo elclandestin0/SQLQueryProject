@@ -17,11 +17,12 @@ def connect(db_name="news"):
         db = psycopg2.connect("dbname={}".format(db_name))
         cursor = db.cursor()
         return db, cursor
-        print ("Successfully connected to the news database.\n")
+        print("Successfully connected to the news database.\n")
     except:
         print("""Unable to connect to the news database.
                  The program will now exit.\n""")
         sys.exit()
+
 
 def first_query():
     """In the first query, we want to fetch
@@ -108,7 +109,7 @@ def third_query():
         to access website is greater than 1%"""
 
     db, c = connect()
-    
+
     # To perform this query, it took me a while to code around
     # a subquery. However, as I read the documentation and the
     # similar problems encountered by the community, I realized
