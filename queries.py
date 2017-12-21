@@ -1,18 +1,19 @@
+# Code written by: Memo Khoury
 import datetime
 import psycopg2
 import bleach
 import csv
 
 """In this file, we will define the queries,
-    and run them one by one. Ideally, we want
-    the final product to be displayed on a
-    www server hosted as a guest."""
+   and run them one by one. Ideally, we want
+   the final product to be displayed on a
+   www server hosted as a guest."""
 
 
 def first_query():
     """In the first query, we want to fetch
-    the top 3 rows that contain the article
-    names with the greatest views"""
+       the top 3 rows that contain the article
+       names with the greatest views"""
 
     db_name = "news"
     db = psycopg2.connect(dbname=db_name)
@@ -29,33 +30,36 @@ def first_query():
     # fetch only the first 3 rows to get the three
     # juiciest articles of all time!
 
-    first_query = """select a.title, count(*) as views
-    from articles as a, log as l
-    where l.path like concat('/article/', a.slug)
-    group by a.title
-    order by views desc
-    fetch next 3 rows only"""
+    first_query = """select art.title, count(*) as views
+                     from articles as art, log as l
+                     where l.path like concat('/article/', art.slug)
+                     group by a.title
+                     order by views desc
+                     fetch next 3 rows only"""
+    print """Executing first query. Please stand by while we
+             query the data."""
     c.execute(first_query)
     first_query_results = c.fetchall()
     # Here, the first_query results are stored in
-    # a variableby the fetch all command. We print
+    # a variable by the fetch all command. We print
     # no results if there are no rows. Otherwise
     # we print the results of the query, tuple by
-    # tuples
+    # tuple.
     if c.rowcount == 0:
         print "Query returned no results!"
     else:
         for row in first_query_results:
             print(row)
+
     print "First query is complete"
     db.close()
 
 
 def second_query():
     """In the second query, we want to fetch the top
-    authors of all time. We add on top of the logic of
-    our first query by making sure that the author of
-    article (id) = the id of the author."""
+       authors of all time. We add on top of the logic of
+       our first query by making sure that the author of
+       article (id) = the id of the author."""
 
     db_name = "news"
     db = psycopg2.connect(dbname=db_name)
@@ -65,12 +69,16 @@ def second_query():
     # that were aggregated from equating the author ID with
     # the article's author (in ID), AND equating the path of
     # the log with the concatenated slug of the article.
-    # Since we
+    # Since we want the top authors, and not only three,
+    # we don't fetch the first three or n number of tuples.
     second_query = """select auth.name, count(*) as views
-    from articles as art, authors as auth, log as l
-    where art.author = auth.id and l.path like concat('%', art.slug)
-    group by auth.name
-    order by views desc"""
+                      from articles as art, authors as auth, log as l
+                      where art.author = auth.id
+                      and l.path like concat('/article/', art.slug)
+                      group by auth.name
+                      order by views desc"""
+    print """Executing second query. Please stand by while we
+             query the data."""
     c.execute(second_query)
     second_query_results = c.fetchall()
 
@@ -82,13 +90,44 @@ def second_query():
     print "Second query is complete"
     db.close()
 
-# first_query()
-second_query()
+def third_query():
+    """In the third query, bla bla"""
 
+    db_name = "news"
+    db = psycopg2.connect(dbname=db_name)
+    c = db.cursor()
+
+    # Explain query here bla bla
+    third_query = """select time::date as day,
+                     round(count(status) filter (where status = '404 NOT FOUND') * 100::numeric /
+                     count(status)::numeric, 2) as error_percent
+                     from log
+                     where time::date between
+                     to_date('2016-07-01', 'yyyy-mm-dd')
+                     and to_date('2016-07-31', 'yyyy-mm-dd')
+                     group by time::date
+                     order by error_percent > 1"""
+
+    print """ Exeuting third query. Please stand by while we
+              query the data."""
+    c.execute(third_query)
+    third_query_results = c.fetchone()
+
+    if c.rowcount == 0:
+        print "Third query returned no results!"
+    else:
+        for row in third_query_results:
+            print(row)
+    db.close()
+
+
+#first_query()
+#second_query()
+third_query()
 # user_input = input("""Hello and welcome to the Logs analysis
 #       program! Please select the following:
 #       1) Find the top 3 articles of all time
-#       2) Find the top 3 authors of all time
+#       2) Find the top authors of all time
 #       3) Find the day where more than 1 percent
 #       of the requests lead to errors""")
 
