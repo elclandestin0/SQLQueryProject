@@ -135,6 +135,7 @@ def third_query():
             print(row)
     db.close()
 
+
 def user():
     user_greeting = """Please select the following:
           1) Find the top 3 articles of all time OR
