@@ -1,3 +1,4 @@
+# #!/usr/bin/env python
 # Code written by: Memo Khoury
 import datetime
 import psycopg2
@@ -30,11 +31,11 @@ def first_query():
     # fetch only the first 3 rows to get the three
     # juiciest articles of all time!
 
-    first_query = """select art.title, count(*) as views
-                     from articles as art, log as l
-                     where l.path like concat('/article/', art.slug)
-                     group by art.title
-                     order by views desc
+    first_query = """SELECT art.title, COUNT(*) AS views
+                     FROM articles AS art, log AS l
+                     WHERE l.path LIKE concat('/article/', art.slug)
+                     GROUP BY art.title
+                     ORDER BY views DESC
                      fetch next 3 rows only"""
     print """Executing first query. Please stand by while we
              query the data.\n"""
@@ -49,12 +50,11 @@ def first_query():
         print "Query returned no results!\n"
     else:
         for row in first_query_results:
+            row = dict(row)
             print(row)
 
     print "First query is complete\n"
     db.close()
-
-
 def second_query():
     """In the second query, we want to fetch the top
        authors of all time. We add on top of the logic of
@@ -71,12 +71,12 @@ def second_query():
     # the log with the concatenated slug of the article.
     # Since we want the top authors, and not only three,
     # we don't fetch the first three or n number of tuples.
-    second_query = """select auth.name, count(*) as views
-                      from articles as art, authors as auth, log as l
-                      where art.author = auth.id
-                      and l.path like concat('/article/', art.slug)
-                      group by auth.name
-                      order by views desc"""
+    second_query = """SELECT auth.name, COUNT(*) AS views
+                      FROM articles AS art, authors AS auth, log AS l
+                      WHERE art.author = auth.id
+                      AND l.path like concat('/article/', art.slug)
+                      GROUP BY auth.name
+                      ORDER BY views DESC"""
     print """Executing second query. Please stand by while we
              query the data.\n"""
     c.execute(second_query)
@@ -86,7 +86,11 @@ def second_query():
         print "Second query returned no results!\n"
     else:
         for row in second_query_results:
-            print(row)
+            name_of_author = row[0]
+            views = row[1]
+            print("name: %s", (row[0],))
+            print("views: %s", (row[1],))
+
     print "Second query is complete\n"
     db.close()
 
@@ -110,17 +114,19 @@ def third_query():
     # the percentage of errors. We aggregate this data in the
     # month of July. Finally, after the data aggregation, we
     # fetch the tuples that gives us the percentage > 1.0% !
-    third_query = """select time::date as day,
+    third_query = """
+                     CREATE VIEW error_percent AS
+                     SELECT time::date AS day,
                      round(count(status) filter
-                     (where status = '404 NOT FOUND') * 100::numeric
-                     / count(status)::numeric, 2) as error_percent
-                     from log
-                     where time::date between
+                     (WHERE status = '404 NOT FOUND') * 100::numeric
+                     / count(status)::numeric, 2) AS error_percent
+                     FROM log
+                     WHERE time::date BETWEEN
                      to_date('2016-07-01', 'yyyy-mm-dd')
-                     and to_date('2016-07-31', 'yyyy-mm-dd')
-                     group by time::date
-                     having round(count(status) filter
-                     (where status = '404 NOT FOUND')* 100::numeric
+                     AND to_date('2016-07-31', 'yyyy-mm-dd')
+                     GROUP BY time::date
+                     HAVING round(count(status) filter
+                     (WHERE status = '404 NOT FOUND')* 100::numeric
                      /count(status)::numeric, 2) > 1.0"""
 
     print """ Exeuting third query. Please stand by while we
