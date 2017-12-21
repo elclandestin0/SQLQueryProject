@@ -11,17 +11,17 @@ file to your directory. <code>cd</code> into the directory, and run the followin
 
 
 This connects to the installed database, creates the tables from the file, and populates
-them with data. From there, you can run many <code> psql </code> commands (https://www.postgresql.org/docs/8.4/static/tutorial-select.html)
+them with data. From there, you can run many <code>psql</code> commands (https://www.postgresql.org/docs/8.4/static/tutorial-select.html)
 to query the data, or to explore the relations and their respective columns of data. The following relations contained in the news database are:
 - <code> log </code>
 - <code> authors </code>
 - <code> articles </code>
 
 <code>psql</code> commands to explore the database:
-<code> \d [insert relation name here] </code> to fetch the columns contained in the relation, and their respective datatypes
-<code> \dt </code> to fetch all the relations in the database
-<code> \dt+ </code> to fetch all the relations in the database with disk storage information
-<code> select * from [insert relation name here] </code> explores all the populated data as tuples in a relation.
+- <code>\d [insert relation name here]:</code> to fetch the columns contained in the relation, and their respective datatypes
+- <code>\dt:</code> to fetch all the relations in the database
+- <code>\dt+:</code> to fetch all the relations in the database with disk storage information
+- <code>select * from [insert relation name here]:</code> explores all the populated data as tuples in a relation.
 NOTE: Some relations take a while to query all the data, especially <code> log </code>. This is okay as it takes
 time to load a large amount of populated tuples!
 
@@ -36,4 +36,4 @@ to choose from:
 
 For the results on those queries, kindly refer to the results.txt file.
 
-I hope you have a kick ass time with <code> psql </code> ! 
+I hope you have a kick ass time with <code>psql</code>!
