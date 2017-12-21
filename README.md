@@ -37,3 +37,6 @@ to choose from:
 For the results on those queries, kindly refer to the results.txt file.
 
 I hope you have a kick ass time with <code>psql</code>!
+
+Special thanks to the Udacity team for fostering incredible education and passion
+into the hearts of their students. 
