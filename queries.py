@@ -164,4 +164,5 @@ def user():
         print "Invalid input!\n"
         user()
 
-user()
+if __name__ == "__main__":
+    user()
