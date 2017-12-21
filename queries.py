@@ -37,7 +37,7 @@ def first_query():
                      order by views desc
                      fetch next 3 rows only"""
     print """Executing first query. Please stand by while we
-             query the data."""
+             query the data.\n"""
     c.execute(first_query)
     first_query_results = c.fetchall()
     # Here, the first_query results are stored in
@@ -46,12 +46,12 @@ def first_query():
     # we print the results of the query, tuple by
     # tuple.
     if c.rowcount == 0:
-        print "Query returned no results!"
+        print "Query returned no results!\n"
     else:
         for row in first_query_results:
             print(row)
 
-    print "First query is complete"
+    print "First query is complete\n"
     db.close()
 
 
@@ -78,16 +78,16 @@ def second_query():
                       group by auth.name
                       order by views desc"""
     print """Executing second query. Please stand by while we
-             query the data."""
+             query the data.\n"""
     c.execute(second_query)
     second_query_results = c.fetchall()
 
     if c.rowcount == 0:
-        print "Second query returned no results!"
+        print "Second query returned no results!\n"
     else:
         for row in second_query_results:
             print(row)
-    print "Second query is complete"
+    print "Second query is complete\n"
     db.close()
 
 
@@ -124,36 +124,39 @@ def third_query():
                      /count(status)::numeric, 2) > 1.0"""
 
     print """ Exeuting third query. Please stand by while we
-              query the data."""
+              query the data.\n"""
     c.execute(third_query)
     third_query_results = c.fetchall()
 
     if c.rowcount == 0:
-        print "Third query returned no results!"
+        print "Third query returned no results!\n"
     else:
         for row in third_query_results:
             print(row)
     db.close()
 
-user_greeting = """Hello and welcome to the Logs analysis
-      program! Please select the following:
-      1) Find the top 3 articles of all time OR
-      2) Find the top authors of all time OR
-      3) Find the day where more than 1 percent OR
-      of the requests lead to errors OR
-      0) Exit program \n"""
-
-user_input = input(user_greeting)
-
-while user_input != 0:
+def user():
+    user_greeting = """Please select the following:
+          1) Find the top 3 articles of all time OR
+          2) Find the top authors of all time OR
+          3) Find the day where more than 1 percent OR
+          of the requests lead to errors OR
+          0) Exit program \n"""
+    user_input = input(user_greeting)
     if user_input == 1:
         first_query()
+        user()
     elif user_input == 2:
         second_query()
+        user()
     elif user_input == 3:
         third_query()
+        user()
     elif user_input == 0:
-        print "Exiting program"
+        print "Exiting program\n"
         sys.exit()
     else:
-        print "Invalid input!"
+        print "Invalid input!\n"
+        user()
+
+user()
