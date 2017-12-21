@@ -50,11 +50,13 @@ def first_query():
         print "Query returned no results!\n"
     else:
         for row in first_query_results:
-            print (str(row[0]).strip("()").strip("''") + " - " +
-            str(row[1]).strip("L"))
+            print(str(row[0]).strip("()").strip("''") +
+                  " - " + str(row[1]).strip("L"))
 
     print "First query is complete\n"
     db.close()
+
+
 def second_query():
     """In the second query, we want to fetch the top
        authors of all time. We add on top of the logic of
@@ -86,8 +88,8 @@ def second_query():
         print "Second query returned no results!\n"
     else:
         for row in second_query_results:
-            print (str(row[0]).strip("()").strip("''") + " - " +
-            str(row[1]).strip("L"))
+            print(str(row[0]).strip("()").strip("''") +
+                  " - " + str(row[1]).strip("L"))
 
     print "Second query is complete\n"
     db.close()
@@ -135,8 +137,8 @@ def third_query():
         print "Third query returned no results!\n"
     else:
         for row in third_query_results:
-            print (str(row[0]).strip("()").strip("''") + " - " +
-            str(row[1]).strip("L") + "%")
+            print(str(row[0]).strip("()").strip("''") +
+                  " - " + str(row[1]).strip("L") + "%")
     db.close()
 
 
