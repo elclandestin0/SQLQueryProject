@@ -1,0 +1,46 @@
+Program begin: 
+
+Please select the following:
+          1) Find the top 3 articles of all time OR
+          2) Find the top authors of all time OR
+          3) Find the day where more than 1 percent OR
+          of the requests lead to errors OR
+          0) Exit program 
+
+Query #1 Results:
+1 
+Executing first query. Please stand by while we
+             query the data.
+
+('Candidate is jerk, alleges rival', 338647L)
+('Bears love berries, alleges bear', 253801L)
+('Bad things gone, say good people', 170098L)
+First query is complete
+
+
+Query #2 Results:
+2
+Executing second query. Please stand by while we
+             query the data.
+
+('Ursula La Multa', 507594L)
+('Rudolf von Treppenwitz', 423457L)
+('Anonymous Contributor', 170098L)
+('Markoff Chaney', 84557L)
+Second query is complete
+
+Query #3 Results: 
+3
+ Executing third query. Please stand by while we
+              query the data.
+
+(datetime.date(2016, 7, 17), Decimal('2.26'))
+Please select the following:
+          1) Find the top 3 articles of all time OR
+          2) Find the top authors of all time OR
+          3) Find the day where more than 1 percent OR
+          of the requests lead to errors OR
+          0) Exit program 
+
+
+ 
