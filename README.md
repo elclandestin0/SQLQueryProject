@@ -18,7 +18,7 @@ to query the data, or to explore the relations and their respective columns of d
 - <code> articles </code>
 
 <code>psql</code> commands to explore the database:
-- <code>\d [insert relation name here]:</code> to fetch the columns contained in the relation, and their respective datatypes
+- <code>\d [insert relation name here]</code> to fetch the columns contained in the relation, and their respective datatypes
 - <code>\dt</code> to fetch all the relations in the database
 - <code>\dt+</code> to fetch all the relations in the database with disk storage information
 - <code>select * from [insert relation name here]</code> explores all the populated data as tuples in a relation.
